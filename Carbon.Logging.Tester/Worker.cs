@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Targets;
 
@@ -16,7 +17,7 @@ public class Worker
         _mainLogger = mainLogger;
         builder.AddColoredConsoleTarget("console", config =>
         {
-            config.Layout = NLogLoggerProviderBuilder.DefaultLayout;
+            config.Layout = builder.DefaultLayout;
             var rule = new ConsoleRowHighlightingRule
             {
                 Condition = "level == LogLevel.Debug",
@@ -24,17 +25,17 @@ public class Worker
             };
             config.RowHighlightingRules.Add(rule);
 
-        }, LogLevel.Error);
+        });
         builder.AddFileTarget("file", config =>
         {
-            config.Layout = NLogLoggerProviderBuilder.DefaultLayout;
+            config.Layout = builder.DefaultLayout;
             config.FileName = "${basedir}/Log/${Logger}.log";
         });
         _logger = builder.BuildLogger("mylogger");
 
         _logger2 = provider.GetRequiredService<NLogLoggerProviderBuilder>().AddFileTarget("file", config =>
         {
-            config.Layout = NLogLoggerProviderBuilder.DefaultLayout;
+            config.Layout = builder.DefaultLayout;
             config.FileName = "${basedir}/Log/${Logger}.log";
         }).BuildLogger("logger2");
 

@@ -1,4 +1,6 @@
-﻿using NLog;
+﻿using System;
+using System.Linq;
+using NLog;
 using NLog.Config;
 using NLog.Extensions.Logging;
 using NLog.Targets;
@@ -15,7 +17,10 @@ public sealed class NLogLoggerProviderBuilder
     private readonly LogFactory _logFactory = new();
     private readonly LoggingConfiguration _loggingConfiguration = new();
 
-    public const string DefaultLayout = "${longdate} | ${level:uppercase=true} | ThreadId=${threadid} | ${message} | ${all-event-properties} | ${exception:format=ToString}";
+    /// <summary>
+    /// Gets the default layout
+    /// </summary>
+    public string DefaultLayout { get; } = "${longdate}|${level:uppercase=true}|ThreadId=${threadid}|${message}|${all-event-properties}|${exception:format=ToString}";
 
     /// <summary>
     /// Build an ILogger from NLog configuration file
@@ -60,7 +65,7 @@ public sealed class NLogLoggerProviderBuilder
         LogLevel minLevel = LogLevel.Trace,
         LogLevel maxLevel = LogLevel.Critical)
     {
-        RegisterTargetAndRule(new FileTarget(name), config, minLevel, maxLevel);
+        AddTarget(new FileTarget(name), config, minLevel, maxLevel);
         return this;
     }
 
@@ -78,7 +83,7 @@ public sealed class NLogLoggerProviderBuilder
         LogLevel minLevel = LogLevel.Trace,
         LogLevel maxLevel = LogLevel.Critical)
     {
-        RegisterTargetAndRule(new ColoredConsoleTarget(name), config, minLevel, maxLevel);
+        AddTarget(new ColoredConsoleTarget(name), config, minLevel, maxLevel);
         return this;
     }
 
@@ -96,11 +101,19 @@ public sealed class NLogLoggerProviderBuilder
         LogLevel minLevel = LogLevel.Trace,
         LogLevel maxLevel = LogLevel.Critical)
     {
-        RegisterTargetAndRule(new ConsoleTarget(name), config, minLevel, maxLevel);
+        AddTarget(new ConsoleTarget(name), config, minLevel, maxLevel);
         return this;
     }
 
-    private void RegisterTargetAndRule<T>(
+    /// <summary>
+    /// Adds a target and creates a rule for it
+    /// </summary>
+    /// <param name="target">Target to register</param>
+    /// <param name="config">Target's configuration method</param>
+    /// <param name="minLevel">Minimum log level</param>
+    /// <param name="maxLevel">Maximum log level</param>
+    /// <typeparam name="T">Target type</typeparam>
+    public void AddTarget<T>(
         T target,
         Action<T>? config = null,
         LogLevel minLevel = LogLevel.Trace,
