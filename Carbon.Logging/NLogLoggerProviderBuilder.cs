@@ -106,6 +106,24 @@ public sealed class NLogLoggerProviderBuilder
     }
 
     /// <summary>
+    /// Add a debug system target
+    /// </summary>
+    /// <param name="name">Target's name</param>
+    /// <param name="config">Target's configuration method</param>
+    /// <param name="minLevel">Minimum log level</param>
+    /// <param name="maxLevel">Maximum log level</param>
+    /// <returns><see cref="NLogLoggerProviderBuilder"/></returns>
+    public NLogLoggerProviderBuilder AddDebugSystemTarget(
+        string name,
+        Action<DebugSystemTarget>? config,
+        LogLevel minLevel = LogLevel.Trace,
+        LogLevel maxLevel = LogLevel.Critical)
+    {
+        AddTarget(new DebugSystemTarget(name), config, minLevel, maxLevel);
+        return this;
+    }
+
+    /// <summary>
     /// Adds a target and creates a rule for it
     /// </summary>
     /// <param name="target">Target to register</param>
