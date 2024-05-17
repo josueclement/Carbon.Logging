@@ -20,7 +20,7 @@ public sealed class NLogLoggerProviderBuilder
     /// <summary>
     /// Gets the default layout
     /// </summary>
-    public string DefaultLayout { get; } = "${longdate}|${level:uppercase=true}|ThreadId=${threadid}|${message}|${all-event-properties}|${exception:format=ToString}";
+    public string DefaultLayout => "${longdate}|${level:uppercase=true}|ThreadId=${threadid}|${message}|${all-event-properties}|${exception:format=ToString}";
 
     /// <summary>
     /// Build an ILogger from NLog configuration file

@@ -8,8 +8,10 @@
         <Title>Carbon.Logging</Title>
         <Authors>Josué Clément</Authors>
         <Copyright>Josué Clément © 2024</Copyright>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <DocumentationFile>Carbon.Logging.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
